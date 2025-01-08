@@ -3,18 +3,18 @@ package Classes;
 import java.time.LocalDate;
 
 public class Passagier extends Persoon{
-    private int bagage;
+    private double bagage;
 
-    public Passagier(String voornaam, String achternaam, LocalDate geboortedatum, String adress, int bagage) {
+    public Passagier(String voornaam, String achternaam, LocalDate geboortedatum, String adress, double bagage) {
         super(voornaam, achternaam, geboortedatum, adress);
         this.bagage = bagage;
     }
 
-    public int getBagage() {
+    public double getBagage() {
         return bagage;
     }
 
-    public void setBagage(int bagage) {
+    public void setBagage(double bagage) {
         this.bagage = bagage;
     }
 
