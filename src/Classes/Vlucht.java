@@ -94,6 +94,10 @@ public class Vlucht {
                 '}';
     }
 
+    /*
+    * @return void
+    * @param ticket van passagier die je aan vlucht wil toevoegen
+    */
     public void voegPassagierToe (Ticket ticket) {
         passagiersOpVlucht.add(ticket.getPassagier());
 
