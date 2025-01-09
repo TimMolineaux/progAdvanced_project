@@ -2,13 +2,11 @@ import Classes.Passagier;
 import Classes.Ticket;
 import Classes.Vlucht;
 import Lijsten.Bestemmingen;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
@@ -46,7 +44,7 @@ public class Main {
                     System.out.println("Passagier aanmaken");
                     String voornaam;
                     String achternaam;
-                    LocalDate geboortedatum;
+                    LocalDate geboortedatum = LocalDate.now();
                     String adress;
                     double bagage;
 
@@ -60,10 +58,15 @@ public class Main {
                         achternaam = input.nextLine();
                     }while (Objects.equals(achternaam, ""));
 
-                    System.out.println("Vul de geboortedatum in in(jjjj/mm/dd):");
+                    System.out.println("Vul de geboortedatum in in(jjjj-mm-dd):");
+
                     do {
-                        geboortedatum = LocalDate.parse(input.nextLine());
-                    }while (Objects.equals(geboortedatum, ""));
+                        try {
+                            geboortedatum = LocalDate.parse(input.nextLine());
+                        }catch (DateTimeParseException e) {
+                            System.err.println("Je hebt een ongeldige datum ingegeven!");
+                        }
+                    } while (Objects.equals(geboortedatum, LocalDate.now()));
 
                     System.out.println("Vul het adress in:");
                     do {
@@ -186,8 +189,9 @@ public class Main {
                     String passagier;
                     String vlucht;
                     String klasse;
-                    boolean controleP = false;
-                    boolean controleV = false;
+                    Passagier gekozenPassagier = null;
+                    Vlucht gekozenVlucht = null;
+
 
                     if (passagiers.isEmpty()){
                         System.err.println("Er zijn geen passagiers gevonden!");
@@ -201,16 +205,17 @@ public class Main {
 
                     do{
                         passagier = input.nextLine();
+                        boolean tagGevonden = false;
 
                         for (Passagier P : passagiers){
                             if (P.getVoornaam().equalsIgnoreCase(passagier)){
-                                controleP = true;
+                                gekozenPassagier = P;
                                 break;
                             }else {
-                                System.err.println("Deze passagier bestaat niet!");//foutmelding verschijnt in begin van loop zonder enige input van gebruiker
+                                System.err.println("Deze passagier bestaat niet!");
                             }
                         }
-                    }while (!controleP);
+                    }while (gekozenPassagier == null);
 
                     System.out.println("Vul de vluchtcode in van de vlucht waar je de passagier op wil plaatsen:");
 
@@ -219,13 +224,13 @@ public class Main {
 
                         for (Vlucht V : vluchten){
                             if (V.getVluchtcode().equalsIgnoreCase(vlucht)){
-                                controleV = true;
+                                gekozenVlucht = V;
                                 break;
                             }else {
                                 System.err.println("Deze vlucht bestaat niet!");
                             }
                         }
-                    }while (!controleV);
+                    }while (gekozenVlucht == null);
 
                     System.out.println("Tot welke klasse behoort de passagier(Business/Economy)?");
 
@@ -236,22 +241,6 @@ public class Main {
                             System.err.println("Je hebt een ongeldige klasse ingegeven(Let op hoofdletters)!");
                         }
                     }while (!Objects.equals(klasse, "Business") && !Objects.equals(klasse, "Economy"));
-
-                    Passagier gekozenPassagier = null;
-                    for (Passagier P : passagiers) {
-                        if (P.getVoornaam().equalsIgnoreCase(passagier)) {
-                            gekozenPassagier = P;
-                            break;
-                        }
-                    }
-
-                    Vlucht gekozenVlucht = null;
-                    for (Vlucht V : vluchten) {
-                        if (V.getVluchtcode().equalsIgnoreCase(vlucht)) {
-                            gekozenVlucht = V;
-                            break;
-                        }
-                    }
 
                     Ticket t = new Ticket(gekozenPassagier, gekozenVlucht, klasse);
                     tickets.add(t);
@@ -332,7 +321,6 @@ public class Main {
                     }catch (IOException e){
                         System.err.println("Bestand kan niet aangemaakt worden");
                     }
-
                     break;
             }
         }while (optie != 7);
