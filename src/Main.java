@@ -2,6 +2,12 @@ import Classes.Passagier;
 import Classes.Ticket;
 import Classes.Vlucht;
 import Lijsten.Bestemmingen;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -253,12 +259,80 @@ public class Main {
                     break;
                 case 4:
                     System.out.println("Passagier aan vlucht toevoegen");
+                    String passagier2;
+                    Ticket gekozenTicket = null;
+
+                    //check of er wel passagiers of vluchten zijn
+                    if (passagiers.isEmpty()){
+                        System.err.println("Er zijn geen passagiers gevonden!");
+                        break;
+                    }else if (vluchten.isEmpty()){
+                        System.err.println("Er zijn geen beschikbare vluchten!");
+                        break;
+                    }
+
+                    System.out.println("Vul de voornaam in van de passagier die je op de vlucht wil plaatsen:");
+
+                    do{
+                        passagier2 = input.nextLine();
+
+                        for (Ticket T : tickets){
+                            if (T.getPassagier().getVoornaam().equalsIgnoreCase(passagier2)) {
+                                gekozenTicket = T;
+                                break;
+                            }else {
+                                System.err.println("Deze passagier bestaat niet!");
+                            }
+                        }
+                    }while (gekozenTicket == null);
+
+                    gekozenTicket.getVlucht().voegPassagierToe(gekozenTicket);
+
+                    ArrayList<Passagier> passagiersLijst = gekozenTicket.getVlucht().getPassagiers();
+
+                    for (Passagier P : passagiersLijst)
+                    {
+                        System.out.println(P.getVoornaam());
+                    }
                     break;
                 case 5:
                     System.out.println("Personeel aan vlucht toewijzen");
+                    System.err.println("Deze functie bestaat niet!");
                     break;
                 case 6:
                     System.out.println("Vlucht info printen");
+                    String vInput;
+                    Vlucht vluchtCode = null;
+
+                    System.out.println("Vul de vluchtcode in van de vlucht waar je een lijst van wilt:");
+
+                    do{
+                        vInput = input.nextLine();
+
+                        for (Vlucht V : vluchten){
+                            if (V.getVluchtcode().equalsIgnoreCase(vInput)){
+                                vluchtCode = V;
+                                break;
+                            }else {
+                                System.err.println("Deze vlucht bestaat niet!");
+                            }
+                        }
+                    }while (vluchtCode == null);
+
+                    File vluchtInfo = new File("C:\\Users\\timmo\\IdeaProjects\\progAdvanced\\Luchthaven\\vlucht_info.txt");
+
+                    try(FileWriter fileWriter = new FileWriter(vluchtInfo)) {
+                        FileWriter writer = new FileWriter(vluchtInfo);
+
+                        ArrayList<Passagier> lijst = vluchtCode.getPassagiers();
+                        for (Passagier P : lijst){
+                            writer.write(P.getVoornaam() + ' ' + P.getAchternaam() + "\n");
+                        }
+                        writer.close();
+                    }catch (IOException e){
+                        System.err.println("Bestand kan niet aangemaakt worden");
+                    }
+
                     break;
             }
         }while (optie != 7);

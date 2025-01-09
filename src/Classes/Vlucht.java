@@ -1,5 +1,8 @@
 package Classes;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class Vlucht {
     private String vluchtcode;
     private String beginPlaats;
@@ -9,6 +12,8 @@ public class Vlucht {
     private double maxGewicht;
     private boolean flightCheck;
 
+    private ArrayList<Passagier> passagiersOpVlucht;
+
     public Vlucht(String vluchtcode, String beginPlaats, String eindBestemming, int econonomyPlaatsen, int businessPlaatsen, double maxGewicht, boolean flightCheck) {
         this.vluchtcode = vluchtcode;
         this.beginPlaats = beginPlaats;
@@ -17,6 +22,7 @@ public class Vlucht {
         this.businessPlaatsen = businessPlaatsen;
         this.maxGewicht = maxGewicht;
         this.flightCheck = flightCheck;
+        this.passagiersOpVlucht = new ArrayList<>();
     }
 
     public String getVluchtcode() {
@@ -86,5 +92,19 @@ public class Vlucht {
                 ", maxGewicht=" + maxGewicht +
                 ", flightCheck=" + flightCheck +
                 '}';
+    }
+
+    public void voegPassagierToe (Ticket ticket) {
+        passagiersOpVlucht.add(ticket.getPassagier());
+
+        if (Objects.equals(ticket.getKlasse(), "Business")) {
+            businessPlaatsen--;
+        }else if (Objects.equals(ticket.getKlasse(), "Economy")) {
+            econonomyPlaatsen--;
+        }
+    }
+
+    public ArrayList<Passagier> getPassagiers() {
+        return passagiersOpVlucht;
     }
 }
