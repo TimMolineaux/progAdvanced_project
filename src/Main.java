@@ -1,4 +1,5 @@
 import Classes.Passagier;
+import Classes.Ticket;
 import Classes.Vlucht;
 import Lijsten.Bestemmingen;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ public class Main {
 
         ArrayList<Passagier> passagiers = new ArrayList<>();
         ArrayList<Vlucht> vluchten = new ArrayList<>();
+        ArrayList<Ticket> tickets = new ArrayList<>();
 
         do {
             do {
@@ -178,22 +180,76 @@ public class Main {
                     String passagier;
                     String vlucht;
                     String klasse;
-                    boolean controle = false;
+                    boolean controleP = false;
+                    boolean controleV = false;
+
+                    if (passagiers.isEmpty()){
+                        System.err.println("Er zijn geen passagiers gevonden!");
+                        break;
+                    }else if (vluchten.isEmpty()){
+                        System.err.println("Er zijn geen beschikbare vluchten!");
+                        break;
+                    }
+
+                    System.out.println("Vul de voornaam van de passagier in");
 
                     do{
-                        System.out.println("Vul de voornaam van de passagier in");
                         passagier = input.nextLine();
 
                         for (Passagier P : passagiers){
                             if (P.getVoornaam().equalsIgnoreCase(passagier)){
-                                controle = true;
+                                controleP = true;
                                 break;
                             }else {
-                                System.err.println("Deze passagier bestaat niet!");
+                                System.err.println("Deze passagier bestaat niet!");//foutmelding verschijnt in begin van loop zonder enige input van gebruiker
                             }
                         }
+                    }while (!controleP);
 
-                    }while (controle == false);
+                    System.out.println("Vul de vluchtcode in van de vlucht waar je de passagier op wil plaatsen:");
+
+                    do{
+                        vlucht = input.nextLine();
+
+                        for (Vlucht V : vluchten){
+                            if (V.getVluchtcode().equalsIgnoreCase(vlucht)){
+                                controleV = true;
+                                break;
+                            }else {
+                                System.err.println("Deze vlucht bestaat niet!");
+                            }
+                        }
+                    }while (!controleV);
+
+                    System.out.println("Tot welke klasse behoort de passagier(Business/Economy)?");
+
+                    do{
+                        klasse = input.nextLine();
+
+                        if (!Objects.equals(klasse, "Business") && !Objects.equals(klasse, "Economy")){
+                            System.err.println("Je hebt een ongeldige klasse ingegeven(Let op hoofdletters)!");
+                        }
+                    }while (!Objects.equals(klasse, "Business") && !Objects.equals(klasse, "Economy"));
+
+                    Passagier gekozenPassagier = null;
+                    for (Passagier P : passagiers) {
+                        if (P.getVoornaam().equalsIgnoreCase(passagier)) {
+                            gekozenPassagier = P;
+                            break;
+                        }
+                    }
+
+                    Vlucht gekozenVlucht = null;
+                    for (Vlucht V : vluchten) {
+                        if (V.getVluchtcode().equalsIgnoreCase(vlucht)) {
+                            gekozenVlucht = V;
+                            break;
+                        }
+                    }
+
+                    Ticket t = new Ticket(gekozenPassagier, gekozenVlucht, klasse);
+                    tickets.add(t);
+                    System.out.println(tickets);
                     break;
                 case 4:
                     System.out.println("Passagier aan vlucht toevoegen");
