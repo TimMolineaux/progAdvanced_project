@@ -1,11 +1,8 @@
 import Classes.Passagier;
+import Classes.Vlucht;
 import Lijsten.Bestemmingen;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -13,8 +10,10 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
-        int optie = 0;
+        int optie;
+
         ArrayList<Passagier> passagiers = new ArrayList<>();
+        ArrayList<Vlucht> vluchten = new ArrayList<>();
 
         do {
             do {
@@ -70,7 +69,6 @@ public class Main {
 
                     Passagier p = new Passagier(voornaam, achternaam, geboortedatum, adress, bagage);
                     passagiers.add(p);
-                    System.out.println(p.toString());
                     System.out.println(passagiers);
 
                     break;
@@ -83,7 +81,7 @@ public class Main {
                      int businessPlaatsen;
                      double maxGewicht;
                      char vraag;
-                     boolean flightCheck;
+                     boolean flightCheck = false;
 
                     System.out.println("Vul de vluchtcode in:");
                     do{
@@ -170,9 +168,32 @@ public class Main {
                             System.err.println("Je hebt een ongeldige waarde ingegeven!");
                         }
                     }while (vraag != 'j' && vraag != 'n');
+
+                    Vlucht v = new Vlucht(vluchtcode, beginPlaats, eindBestemming, econonomyPlaatsen, businessPlaatsen, maxGewicht, flightCheck);
+                    vluchten.add(v);
+                    System.out.println(vluchten);
                     break;
                 case 3:
                     System.out.println("Ticket aanmaken");
+                    String passagier;
+                    String vlucht;
+                    String klasse;
+                    boolean controle = false;
+
+                    do{
+                        System.out.println("Vul de voornaam van de passagier in");
+                        passagier = input.nextLine();
+
+                        for (Passagier P : passagiers){
+                            if (P.getVoornaam().equalsIgnoreCase(passagier)){
+                                controle = true;
+                                break;
+                            }else {
+                                System.err.println("Deze passagier bestaat niet!");
+                            }
+                        }
+
+                    }while (controle == false);
                     break;
                 case 4:
                     System.out.println("Passagier aan vlucht toevoegen");

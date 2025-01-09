@@ -74,17 +74,4 @@ public class Vlucht {
     public void setFlightCheck(boolean flightCheck) {
         this.flightCheck = flightCheck;
     }
-
-    @Override
-    public String toString() {
-        return "Vlucht{" +
-                "vluchtcode='" + vluchtcode + '\'' +
-                ", beginPlaats='" + beginPlaats + '\'' +
-                ", eindBestemming='" + eindBestemming + '\'' +
-                ", econonomyPlaatsen=" + econonomyPlaatsen +
-                ", businessPlaatsen=" + businessPlaatsen +
-                ", maxGewicht=" + maxGewicht +
-                ", flightCheck=" + flightCheck +
-                '}';
-    }
 }
